@@ -1,15 +1,20 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:green_riding/bottomNavigation/bottomNavigation.dart';
+import 'package:green_riding/main.dart';
+import 'package:green_riding/screens/loginRegister/loginRegister.dart';
 
 class Login extends StatefulWidget {
   @override
   _LoginState createState() => _LoginState();
 }
 
-class _LoginState extends State<Login> {
-  TextEditingController tecEmail = TextEditingController();
-  TextEditingController tecPass = TextEditingController();
+TextEditingController password = TextEditingController();
+TextEditingController email = TextEditingController();
 
+class _LoginState extends State<Login> {
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
   bool checkCurrentPasswordValid = true;
 
@@ -32,7 +37,8 @@ class _LoginState extends State<Login> {
         backgroundColor: Colors.white,
         leading: IconButton(
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => LoginRegister()));
           },
           icon: Icon(
             Icons.arrow_back_ios,
@@ -132,8 +138,15 @@ class _LoginState extends State<Login> {
       minWidth: 120,
       height: 60,
       onPressed: () {
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => Menu()));
+        if (!email.text.contains("@")) {
+          Fluttertoast.showToast(msg: "Email Adresse ist nicht Korrekt");
+        } else if (email.text.isEmpty) {
+          Fluttertoast.showToast(msg: "Geben Sie Ihr Email ein");
+        } else if (password.text.isEmpty) {
+          Fluttertoast.showToast(msg: "Geben Ihre Passwort ein ");
+        } else {
+          userLogin(context);
+        }
       },
       color: Color(0xff90bc5a),
       elevation: 0,
@@ -145,10 +158,8 @@ class _LoginState extends State<Login> {
 
   Widget buildEmail() => TextFormField(
         // autovalidateMode: AutovalidateMode.onUserInteraction,
+        controller: email,
         keyboardType: TextInputType.emailAddress,
-        controller: tecEmail,
-        validator: (value) {},
-
         decoration: InputDecoration(
           prefixIcon: Icon(
             Icons.alternate_email,
@@ -171,8 +182,8 @@ class _LoginState extends State<Login> {
 
   Widget buildPassword() => TextFormField(
         //autovalidateMode: AutovalidateMode.onUserInteraction,
+        controller: password,
         keyboardType: TextInputType.text,
-        controller: tecPass,
         obscureText: true,
         decoration: InputDecoration(
           prefixIcon: Icon(
@@ -195,4 +206,29 @@ class _LoginState extends State<Login> {
           ),
         ),
       );
+  final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  void userLogin(BuildContext context) async {
+    final User? user = (await firebaseAuth
+            .signInWithEmailAndPassword(
+                email: email.text, password: password.text)
+            .catchError((e) {
+      Fluttertoast.showToast(msg: "Error" + e.toString());
+    }))
+        .user;
+    if (user != null) {
+      // ignore: unnecessary_statements
+      userRef.child(user.uid).once().then((DataSnapshot snapshot) {
+        if (snapshot.value != null) {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => Menu()));
+          Fluttertoast.showToast(msg: "Loggin Erfolgreich!!");
+        } else {
+          firebaseAuth.signOut();
+          Fluttertoast.showToast(msg: "Passwort oder Email Stimmt nicht ");
+        }
+      });
+    } else {
+      Fluttertoast.showToast(msg: "Versuchen Sie es mit richtigen Daten");
+    }
+  }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:green_riding/screens/profile/profileWidget/profileWidget.dart';
 
 class Profile extends StatefulWidget {
   @override
@@ -7,6 +8,9 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
+  late final bool ifSmoke = false;
+  late final bool ifAnimal = false;
+  late final bool ifvaccinated = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,27 +22,19 @@ class _ProfileState extends State<Profile> {
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 35,
-            color: Colors.black,
+            color: Color(0xff6A6A6A),
           ),
         ),
         elevation: 0,
         brightness: Brightness.light,
         backgroundColor: Colors.white,
-        leading: IconButton(
-          onPressed: () async {},
-          icon: Icon(
-            Icons.logout,
-            size: 30,
-            color: Colors.black,
-          ),
-        ),
         actions: [
           IconButton(
             onPressed: () {},
             icon: Icon(
-              Icons.settings,
+              Icons.notification_important,
               size: 30,
-              color: Colors.black,
+              color: Color(0xff6A6A6A),
             ),
           ),
         ],
@@ -52,9 +48,9 @@ class _ProfileState extends State<Profile> {
               onPressed: () {},
               imageDirection: '',
             ),
-            const SizedBox(height: 60),
+            const SizedBox(height: 40),
             AgeKids(),
-            const SizedBox(height: 60),
+            const SizedBox(height: 40),
             Container(
               width: 50,
               decoration: BoxDecoration(
@@ -83,7 +79,146 @@ Ich Freue mich auf eure anfragen""",
                 ),
               ),
             ),
-            const SizedBox(height: 60),
+            const SizedBox(height: 20),
+            Column(children: [
+              Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+                Icon(
+                  ifSmoke
+                      ? Icons.smoking_rooms_rounded
+                      : Icons.smoke_free_outlined,
+                  color: Color(0xff90bc5a),
+                  size: 23,
+                ),
+                Text(
+                  ifSmoke ? "Rauchen Erlaubt" : " Rauchen nicht erlaubt",
+                  style: TextStyle(
+                    color: Color(0xff6A6A6A),
+                    fontSize: 23,
+                    height: 1.0,
+                    fontWeight: FontWeight.w500,
+                  ),
+                )
+              ]),
+              SizedBox(height: 5),
+              Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+                Icon(
+                  ifAnimal ? Icons.check_circle : Icons.not_interested_outlined,
+                  color: Color(0xff90bc5a),
+                  size: 21,
+                ),
+                Text(
+                  ifSmoke ? "Tiere Erlaubt" : " Tiere Nicht Erlaubt",
+                  style: TextStyle(
+                    color: Color(0xff6A6A6A),
+                    fontSize: 21,
+                    height: 1.0,
+                    fontWeight: FontWeight.w500,
+                  ),
+                )
+              ]),
+              SizedBox(height: 5),
+              Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+                Icon(
+                  ifAnimal
+                      ? Icons.emoji_emotions
+                      : Icons.emoji_emotions_outlined,
+                  color: Color(0xff90bc5a),
+                  size: 21,
+                ),
+                Text(
+                  ifvaccinated ? "  Geimpft" : "Nicht Geimpft ",
+                  style: TextStyle(
+                    color: Color(0xff6A6A6A),
+                    fontSize: 21,
+                    height: 1.0,
+                    fontWeight: FontWeight.w500,
+                  ),
+                )
+              ]),
+            ]),
+            const SizedBox(height: 40),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
+                  child: Text(
+                    "Tägliche Strecke",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 24,
+                      color: Color(0xff6A6A6A),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            SizedBox(height: 15),
+            IntrinsicHeight(
+              child: Column(children: [
+                Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+                  Icon(
+                    Icons.circle_outlined,
+                    color: Color(0xff90bc5a),
+                    size: 23,
+                  ),
+                  SizedBox(width: 5),
+                  Text(
+                    "7:20",
+                    style: TextStyle(
+                      color: Color(0xff90bc5a),
+                      fontSize: 23,
+                      height: 1.0,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  SizedBox(width: 5),
+                  Text(
+                    "Friedberg",
+                    style: TextStyle(
+                      color: Color(0xff6A6A6A),
+                      fontSize: 23,
+                      height: 1.0,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  )
+                ]),
+                Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+                  Container(
+                    height: 80,
+                    width: 1.0,
+                    color: const Color(0xff6A6A6A),
+                  ),
+                ]),
+                Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+                  Icon(
+                    Icons.circle,
+                    color: Color(0xff90bc5a),
+                    size: 23,
+                  ),
+                  SizedBox(width: 5),
+                  Text(
+                    "8:00",
+                    style: TextStyle(
+                      color: Color(0xff90bc5a),
+                      fontSize: 23,
+                      height: 1.0,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                  SizedBox(width: 5),
+                  Text(
+                    "Frankfurt",
+                    style: TextStyle(
+                      color: Color(0xff6A6A6A),
+                      fontSize: 23,
+                      height: 1.0,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  )
+                ]),
+                SizedBox(height: 5),
+              ]),
+            ),
           ],
         ),
       ),
@@ -94,172 +229,84 @@ Ich Freue mich auf eure anfragen""",
 class AgeKids extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: <Widget>[
-        Column(
-          children: <Widget>[
-            Text(
-              'Coins',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-                color: Color(0xff6A6A6A),
-              ),
-            ),
-            Center(
-              child: Text(
-                "13",
+    return IntrinsicHeight(
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: <Widget>[
+          Column(
+            children: <Widget>[
+              Text(
+                'Coins',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
-                  color: Color(0xff90bc5a),
-                ),
-              ),
-            )
-          ],
-        ),
-        Column(
-          children: <Widget>[
-            Text(
-              'Rides',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-                color: Color(0xff6A6A6A),
-              ),
-            ),
-            Center(
-              child: Text(
-                "20",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                  color: Color(0xff90bc5a),
-                ),
-              ),
-            ),
-          ],
-        ),
-        Column(
-          children: <Widget>[
-            Text(
-              'Bewertung',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 18,
-                color: Color(0xff6A6A6A),
-              ),
-            ),
-            Center(
-              child: Text(
-                "4,5",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 18,
-                  color: Color(0xff90bc5a),
-                ),
-              ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-}
-
-class ProfileWidget extends StatelessWidget {
-  final String imageDirection;
-  final VoidCallback onPressed;
-  final bool ifEdit;
-
-  const ProfileWidget({
-    key,
-    required this.imageDirection,
-    required this.onPressed,
-    this.ifEdit = false,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Stack(
-              children: [
-                buildImage(),
-                Positioned(
-                  bottom: -2,
-                  right: -2,
-                  child: buildEditIcon(Color(0xff3b93c3)),
-                ),
-              ],
-            ),
-          ],
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          children: [
-            Center(
-              child: Text(
-                "Anna Muster",
-                style: TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 24,
                   color: Color(0xff6A6A6A),
                 ),
               ),
-            ),
-          ],
-        ),
-      ],
-    );
-  }
-
-  Widget buildImage() {
-    final image = AssetImage("assets/ProfilePic.png");
-
-    return ClipOval(
-      child: Material(
-        color: Colors.transparent,
-        child: Ink.image(
-          image: image,
-          fit: BoxFit.cover,
-          width: 110,
-          height: 110,
-          child: InkWell(splashColor: Color(0xff3b93c3), onTap: onPressed),
-        ),
+              Center(
+                child: Text(
+                  "13",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                    color: Color(0xff90bc5a),
+                  ),
+                ),
+              )
+            ],
+          ),
+          VerticalDivider(
+            thickness: 2.0,
+          ),
+          Column(
+            children: <Widget>[
+              Text(
+                'Rides',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                  color: Color(0xff6A6A6A),
+                ),
+              ),
+              Center(
+                child: Text(
+                  "20",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                    color: Color(0xff90bc5a),
+                  ),
+                ),
+              ),
+            ],
+          ),
+          VerticalDivider(
+            thickness: 2.0,
+          ),
+          Column(
+            children: <Widget>[
+              Text(
+                'Bewertung',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                  color: Color(0xff6A6A6A),
+                ),
+              ),
+              Center(
+                child: Text(
+                  "4,5",
+                  style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                    color: Color(0xff90bc5a),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }
-
-  Widget buildEditIcon(Color color) => buildCircle(
-        color: Colors.white,
-        all: 3,
-        child: buildCircle(
-          color: color,
-          all: 6,
-          child: Icon(
-            ifEdit ? Icons.add_a_photo : Icons.edit,
-            color: Colors.white,
-            size: 20,
-          ),
-        ),
-      );
-
-  Widget buildCircle({
-    required Widget child,
-    required double all,
-    required Color color,
-  }) =>
-      ClipOval(
-        child: Container(
-          padding: EdgeInsets.all(all),
-          color: color,
-          child: child,
-        ),
-      );
 }

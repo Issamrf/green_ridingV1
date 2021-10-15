@@ -17,20 +17,13 @@ class _ChatOvState extends State<ChatOV> {
           elevation: 0,
           automaticallyImplyLeading: false,
           //leading: Icon(Icons.arrow_back_ios, color: Colors.black),
-          leading: IconButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            icon: Icon(
-              Icons.logout,
-              size: 30,
-              color: Colors.black,
-            ),
-          ),
+
           title: Text(
             'Chats',
             style: TextStyle(
-                fontWeight: FontWeight.bold, fontSize: 35, color: Colors.black),
+                fontWeight: FontWeight.bold,
+                fontSize: 35,
+                color: Color(0xff6A6A6A)),
           )),
     );
     //

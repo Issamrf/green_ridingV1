@@ -17,9 +17,9 @@ class _MenuState extends State<Menu> {
 
   final List<Widget> screenOptions = [
     Profile(),
-    ChatOV(),
-    CreateDrive(),
     SearchDrive(),
+    CreateDrive(),
+    ChatOV(),
     Settings(),
   ];
 
@@ -43,11 +43,11 @@ class _MenuState extends State<Menu> {
           unselectedItemColor: Color(0xff6A6A6A),
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-              icon: Icon(CupertinoIcons.person_fill),
+              icon: Icon(CupertinoIcons.person),
               title: Text(''),
             ),
             BottomNavigationBarItem(
-              icon: Icon(CupertinoIcons.location_fill),
+              icon: Icon(CupertinoIcons.search_circle),
               title: Text(''),
             ),
             BottomNavigationBarItem(
@@ -55,11 +55,11 @@ class _MenuState extends State<Menu> {
               title: Text(''),
             ),
             BottomNavigationBarItem(
-                icon: Icon(CupertinoIcons.chat_bubble_2_fill),
+                icon: Icon(CupertinoIcons.chat_bubble),
                 title: Text(''),
                 backgroundColor: Colors.white),
             BottomNavigationBarItem(
-              icon: Icon(Icons.help),
+              icon: Icon(Icons.settings),
               title: Text(''),
             ),
           ],

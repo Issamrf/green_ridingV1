@@ -1,5 +1,9 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:green_riding/bottomNavigation/bottomNavigation.dart';
+import 'package:green_riding/main.dart';
+import 'package:green_riding/screens/loginRegister/loginRegister.dart';
 
 ///This Class Contains the UI and the conditions of signin Up
 ///Author: Issam Rafiq
@@ -9,16 +13,16 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-  String formName = "";
-  String formPlz = "";
-  String formBirthday = "";
-  String formKids = "";
-  String formEmail = "";
-  String formCity = "";
-  String formPassword = "";
-  String formPasswordConfirm = "";
-  bool agree = false;
-  bool validate = false;
+  TextEditingController name = TextEditingController();
+  TextEditingController surname = TextEditingController();
+  TextEditingController phone = TextEditingController();
+  TextEditingController password = TextEditingController();
+  TextEditingController rePassword = TextEditingController();
+  TextEditingController email = TextEditingController();
+  String startTime = "";
+  String startPlace = "";
+  String arriveTime = "";
+  String endPlace = "";
 
   bool isCheck = false;
 
@@ -43,7 +47,8 @@ class _RegisterState extends State<Register> {
         backgroundColor: Colors.white,
         leading: IconButton(
           onPressed: () {
-            Navigator.pop(context);
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => LoginRegister()));
           },
           icon: Icon(
             Icons.arrow_back_ios,
@@ -144,8 +149,14 @@ class _RegisterState extends State<Register> {
         minWidth: 120,
         height: 60,
         onPressed: () async {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => Menu()));
+          if (!email.text.contains("@")) {
+            Fluttertoast.showToast(msg: "Email Adresse ist nicht Korrekt");
+          } else if (password.text.length < 7) {
+            Fluttertoast.showToast(msg: "Passwort muss mindestens ");
+          } else if (password.text != rePassword.text) {
+            Fluttertoast.showToast(msg: "Passwörter stimmen nicht überein");
+          }
+          registerUser(context);
         },
         color: Color(0xff90bc5a),
         elevation: 0,
@@ -165,10 +176,8 @@ class _RegisterState extends State<Register> {
   Widget buildName() => TextFormField(
         // autovalidateMode: AutovalidateMode.onUserInteraction,
         keyboardType: TextInputType.text,
-        validator: (value) {},
-        onChanged: (value) => setState(
-          () => formName = value,
-        ),
+
+        controller: name,
         decoration: InputDecoration(
           prefixIcon: Icon(Icons.person_outline, color: Color(0xff90bc5a)),
           hintText: "Vorname",
@@ -188,11 +197,9 @@ class _RegisterState extends State<Register> {
 
   Widget buildNickname() => TextFormField(
         //  autovalidateMode: AutovalidateMode.onUserInteraction,
-        keyboardType: TextInputType.number,
-        validator: (value) {},
-        onChanged: (value) => setState(
-          () => formPlz = value,
-        ),
+        keyboardType: TextInputType.text,
+
+        controller: surname,
         decoration: InputDecoration(
           prefixIcon: Icon(
             Icons.person_outline,
@@ -216,10 +223,8 @@ class _RegisterState extends State<Register> {
   Widget buildTel() => TextFormField(
         // autovalidateMode: AutovalidateMode.onUserInteraction,
         keyboardType: TextInputType.number,
-        validator: (value) {},
-        onChanged: (value) => setState(
-          () => formKids = value,
-        ),
+
+        controller: phone,
         decoration: InputDecoration(
           prefixIcon: Icon(Icons.phone, color: Color(0xff90bc5a)),
           hintText: "Telefonnummer",
@@ -237,38 +242,11 @@ class _RegisterState extends State<Register> {
         ),
       );
 
-  /* Widget buildCity() => TextFormField(
-        // autovalidateMode: AutovalidateMode.onUserInteraction,
-        keyboardType: TextInputType.text,
-        validator: (value) {},
-        onChanged: (value) => setState(
-          () => formCity = value,
-        ),
-        decoration: InputDecoration(
-          prefixIcon: Icon(Icons.location_city),
-          hintText: "Stadt",
-          contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 10),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(30),
-            borderSide: BorderSide(
-              color: Colors.grey,
-            ),
-          ),
-          border: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: Colors.grey,
-            ),
-          ),
-        ),
-      );*/
-
   Widget buildEmail() => TextFormField(
         // autovalidateMode: AutovalidateMode.onUserInteraction,
         keyboardType: TextInputType.emailAddress,
-        validator: (value) {},
-        onChanged: (value) => setState(
-          () => formEmail = value,
-        ),
+
+        controller: email,
         decoration: InputDecoration(
           prefixIcon: Icon(Icons.alternate_email, color: Color(0xff90bc5a)),
           hintText: "Email",
@@ -289,10 +267,8 @@ class _RegisterState extends State<Register> {
   Widget buildPassword() => TextFormField(
         //  autovalidateMode: AutovalidateMode.onUserInteraction,
         keyboardType: TextInputType.text,
-        validator: (value) {},
-        onChanged: (value) => setState(
-          () => formPassword = value,
-        ),
+
+        controller: password,
         obscureText: true,
         decoration: InputDecoration(
           prefixIcon: Icon(Icons.lock_outline, color: Color(0xff90bc5a)),
@@ -314,10 +290,8 @@ class _RegisterState extends State<Register> {
   Widget buildPasswordConfirm() => TextFormField(
         //  autovalidateMode: AutovalidateMode.onUserInteraction,
         keyboardType: TextInputType.text,
-        validator: (value) {},
-        onChanged: (value) => setState(
-          () => formPasswordConfirm = value,
-        ),
+
+        controller: rePassword,
         obscureText: true,
         decoration: InputDecoration(
           prefixIcon: Icon(Icons.lock_open, color: Color(0xff90bc5a)),
@@ -335,4 +309,34 @@ class _RegisterState extends State<Register> {
           ),
         ),
       );
+
+  final FirebaseAuth firebaseAuth = FirebaseAuth.instance;
+  void registerUser(BuildContext context) async {
+    final User? user = (await firebaseAuth
+            .createUserWithEmailAndPassword(
+                email: email.text, password: password.text)
+            .catchError((e) {
+      Fluttertoast.showToast(msg: "Error" + e.toString());
+    }))
+        .user;
+
+    if (user != null) {
+      Map userDataMap = {
+        "name": name.text.trim(),
+        "surname": surname.text.trim(),
+        "email": email.text.trim(),
+        "phone": phone.text.trim(),
+        "startTime": startTime,
+        "startPlace": startPlace,
+        "arriveTime": arriveTime,
+        "endPlace": endPlace,
+      };
+
+      userRef.child(user.uid).set(userDataMap);
+      Navigator.push(context, MaterialPageRoute(builder: (context) => Menu()));
+    } else {
+      Fluttertoast.showToast(
+          msg: "Konto wurde nicht erstellt, bitte versuchen Sie es später");
+    }
+  }
 }
