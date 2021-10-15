@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "8891268690",
+    "firebase_url": "https://green-riding-app-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "green-riding-app",
+    "storage_bucket": "green-riding-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:8891268690:android:8d4e54daeea01d7074a98b",
+        "android_client_info": {
+          "package_name": "com.green.ridingapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "8891268690-pgh1pu5jnav62da8tdufl7rd0ar64s9j.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC6nZUnGGN8HZlZX-jNgivAEsTs6JQJ_xw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "8891268690-pgh1pu5jnav62da8tdufl7rd0ar64s9j.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "8891268690-vfbjpnvp6a88j4lv4q8pq7d1rj7mglij.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.green.ridingapp"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

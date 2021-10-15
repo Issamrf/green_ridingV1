@@ -1,0 +1,23 @@
+dependencies: \
+  /Users/issamrafiq/Desktop/green_riding/ios/Runner/GeneratedPluginRegistrant.m \
+  /Users/issamrafiq/Desktop/green_riding/ios/Runner/GeneratedPluginRegistrant.h \
+  /Users/issamrafiq/Desktop/green_riding/ios/build/Debug-iphoneos/Flutter.framework/Modules/module.modulemap \
+  /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.5.sdk/usr/include/mach-o/compact_unwind_encoding.modulemap \
+  /Applications/Xcode.app/Contents/Developer/Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS14.5.sdk/usr/include/mach-o/dyld.modulemap \
+  /Users/issamrafiq/Desktop/green_riding/ios/Pods/Firebase/CoreOnly/Sources/module.modulemap \
+  /Users/issamrafiq/Desktop/green_riding/ios/build/Debug-iphoneos/Flutter.framework/Headers/FlutterViewController.h \
+  /Users/issamrafiq/Desktop/green_riding/ios/build/Debug-iphoneos/Flutter.framework/Headers/FlutterPluginAppLifeCycleDelegate.h \
+  /Users/issamrafiq/Desktop/green_riding/ios/build/Debug-iphoneos/Flutter.framework/Headers/FlutterHeadlessDartRunner.h \
+  /Users/issamrafiq/Desktop/green_riding/ios/build/Debug-iphoneos/Flutter.framework/Headers/FlutterEngineGroup.h \
+  /Users/issamrafiq/Desktop/green_riding/ios/build/Debug-iphoneos/Flutter.framework/Headers/FlutterEngine.h \
+  /Users/issamrafiq/Desktop/green_riding/ios/build/Debug-iphoneos/Flutter.framework/Headers/FlutterDartProject.h \
+  /Users/issamrafiq/Desktop/green_riding/ios/build/Debug-iphoneos/Flutter.framework/Headers/FlutterCallbackCache.h \
+  /Users/issamrafiq/Desktop/green_riding/ios/build/Debug-iphoneos/Flutter.framework/Headers/FlutterTexture.h \
+  /Users/issamrafiq/Desktop/green_riding/ios/build/Debug-iphoneos/Flutter.framework/Headers/FlutterPlatformViews.h \
+  /Users/issamrafiq/Desktop/green_riding/ios/build/Debug-iphoneos/Flutter.framework/Headers/FlutterCodecs.h \
+  /Users/issamrafiq/Desktop/green_riding/ios/build/Debug-iphoneos/Flutter.framework/Headers/FlutterChannels.h \
+  /Users/issamrafiq/Desktop/green_riding/ios/build/Debug-iphoneos/Flutter.framework/Headers/FlutterBinaryMessenger.h \
+  /Users/issamrafiq/Desktop/green_riding/ios/build/Debug-iphoneos/Flutter.framework/Headers/FlutterPlugin.h \
+  /Users/issamrafiq/Desktop/green_riding/ios/build/Debug-iphoneos/Flutter.framework/Headers/FlutterMacros.h \
+  /Users/issamrafiq/Desktop/green_riding/ios/build/Debug-iphoneos/Flutter.framework/Headers/FlutterAppDelegate.h \
+  /Users/issamrafiq/Desktop/green_riding/ios/build/Debug-iphoneos/Flutter.framework/Headers/Flutter.h
