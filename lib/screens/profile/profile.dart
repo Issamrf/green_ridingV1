@@ -65,9 +65,7 @@ class _ProfileState extends State<Profile> {
                   children: [
                     Center(
                         child: Text(
-                      """Ich studiere BWL in Frankfurt und 
-muss Jeden tag dahin fahren. 
-Ich Freue mich auf eure anfragen""",
+                      """Ich studiere BWL in Frankfurt und pendel jeden Tag dort hin. Ich freue mich auf eure Anfragen“""",
                       style: TextStyle(
                         fontSize: 16,
                         height: 1.4,
@@ -107,7 +105,7 @@ Ich Freue mich auf eure anfragen""",
                   size: 21,
                 ),
                 Text(
-                  ifSmoke ? "Tiere Erlaubt" : " Tiere Nicht Erlaubt",
+                  ifSmoke ? "Tiere Erlaubt" : " Tiere nicht Erlaubt",
                   style: TextStyle(
                     color: Color(0xff6A6A6A),
                     fontSize: 21,
@@ -236,7 +234,7 @@ class AgeKids extends StatelessWidget {
           Column(
             children: <Widget>[
               Text(
-                'Coins',
+                'Green Coins',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 18,

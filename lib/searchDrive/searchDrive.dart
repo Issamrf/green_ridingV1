@@ -42,7 +42,7 @@ class _SearchDriveState extends State<SearchDrive> {
   }
 
   static final CameraPosition kGooglePlex = CameraPosition(
-    target: LatLng(37.42796133580664, -122.085749655962),
+    target: LatLng(49.398750, 8.672434),
     zoom: 14.4746,
   );
   @override
@@ -78,7 +78,7 @@ class _SearchDriveState extends State<SearchDrive> {
                 setState(() {
                   bottomMapPadding = 300.0;
                 });
-                locatePosition();
+                //locatePosition();
               }),
           Positioned(
             left: 0.0,

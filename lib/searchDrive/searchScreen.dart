@@ -1,7 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:green_riding/searchDrive/ridesModel.dart';
+
+import 'package:http/http.dart' as http;
 
 class SearchScreen extends StatefulWidget {
   @override
@@ -9,15 +14,45 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
+  Future<RidesModel>? ridesPost;
   TextEditingController pickUp = TextEditingController();
   TextEditingController dropOff = TextEditingController();
   var DBRef = FirebaseDatabase.instance.reference();
+  final FirebaseAuth auth = FirebaseAuth.instance;
+  DateTime currentPhoneDate = DateTime.now();
+  var uid = FirebaseAuth.instance.currentUser?.uid;
+
   @override
   Widget build(BuildContext context) {
     // String placeAdress = Provider.of<AppData>(context).pickUpLocation.placeName;
     // pickUp.text = placeAdress;
 
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        bottomOpacity: 0.0,
+        elevation: 0,
+        automaticallyImplyLeading: false,
+        //leading: Icon(Icons.arrow_back_ios, color: Colors.black),
+
+        title: Text(
+          '',
+          style: TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 25,
+              color: Color(0xff6A6A6A)),
+        ),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Icon(
+            Icons.arrow_back_ios,
+            size: 30,
+            color: Colors.black,
+          ),
+        ),
+      ),
       body: Column(
         children: [
           Container(
@@ -37,14 +72,9 @@ class _SearchScreenState extends State<SearchScreen> {
                       SizedBox(height: 5.0),
                       Stack(
                         children: [
-                          GestureDetector(
-                              onTap: () {
-                                Navigator.pop(context);
-                              },
-                              child: Icon(Icons.arrow_back)),
                           Center(
                             child: Text(
-                              "Ihr Ziel",
+                              "",
                               style: TextStyle(
                                   fontSize: 18.0, fontFamily: "Brand-Bold"),
                             ),
@@ -110,7 +140,10 @@ class _SearchScreenState extends State<SearchScreen> {
                         minWidth: 120,
                         height: 60,
                         onPressed: () async {
-                          addplace();
+                          setState(() {
+                            ridesPost =
+                                createRides("Sam", pickUp.text, dropOff.text);
+                          });
                         },
                         color: Color(0xff90bc5a),
                         elevation: 0,
@@ -128,6 +161,9 @@ class _SearchScreenState extends State<SearchScreen> {
                       ),
                     ],
                   ))),
+          SizedBox(
+            height: 20.0,
+          ),
         ],
       ),
     );
@@ -143,12 +179,41 @@ class _SearchScreenState extends State<SearchScreen> {
   //}
   var p = "hegenischstr. 10, 69124, Heidelberg";
   var g = "hardtstraße, 96, 69124, Heidelberg";
+
+  var now = DateTime.now().toString();
+
   void addplace() {
-    //var user;
-    DBRef.child("Rides").set({
-      "name": "Issam",
+    Map ridesDataMap = {
+      "name": "Mattias",
       "pickUp": pickUp.text,
       "dropOff": dropOff.text,
-    });
+      "time": now,
+    };
+    var ridesId = "87476EF";
+    //var user;
+    DBRef.child("Rides").child(ridesId).set(ridesDataMap);
+  }
+
+  Future<RidesModel> createRides(String name, String start, String end) async {
+    final response = await http.post(
+      Uri.parse('https://poc-api-vcoxoy66iq-uw.a.run.app/rides'),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: jsonEncode(<String, String>{
+        "name": "Mattias",
+        "start": pickUp.text,
+        "end": dropOff.text,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      print("Data Submitted");
+      return RidesModel.fromJson(jsonDecode(response.body));
+    } else {
+      // If the server did not return a 201 CREATED response,
+      // then throw an exception.
+      throw Exception('Failed to create a ride.');
+    }
   }
 }
