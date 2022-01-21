@@ -1,0 +1,5 @@
+version: "Apple Swift version 5.4.2 (swiftlang-1205.0.28.2 clang-1205.0.19.57)"
+options: "c7eaab66bcf6e764b67e3217012e3256"
+build_time: [1642190021, 700658000]
+inputs:
+  "/Users/issamrafiq/Desktop/green_riding/ios/Runner/AppDelegate.swift": [1633011597, 800178170]

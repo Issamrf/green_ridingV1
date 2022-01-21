@@ -14,6 +14,7 @@ class Menu extends StatefulWidget {
 
 class _MenuState extends State<Menu> {
   int pressedIndex = 0;
+  String text = '';
 
   final List<Widget> screenOptions = [
     Profile(),
@@ -44,23 +45,23 @@ class _MenuState extends State<Menu> {
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
               icon: Icon(CupertinoIcons.person),
-              title: Text(''),
+              label: '',
             ),
             BottomNavigationBarItem(
               icon: Icon(CupertinoIcons.search_circle),
-              title: Text(''),
+              label: '',
             ),
             BottomNavigationBarItem(
               icon: Icon(CupertinoIcons.add_circled),
-              title: Text(''),
+              label: '',
             ),
             BottomNavigationBarItem(
                 icon: Icon(CupertinoIcons.chat_bubble),
-                title: Text(''),
+                label: '',
                 backgroundColor: Colors.white),
             BottomNavigationBarItem(
               icon: Icon(Icons.settings),
-              title: Text(''),
+              label: '',
             ),
           ],
           currentIndex: pressedIndex,

@@ -1,10 +1,11 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:green_riding/models/placePredictions.dart';
+import 'package:green_riding/searchDrive/predictionTile.dart';
 import 'package:green_riding/searchDrive/ridesModel.dart';
+import 'package:green_riding/services/requests.dart';
 
 import 'package:http/http.dart' as http;
 
@@ -17,10 +18,23 @@ class _SearchScreenState extends State<SearchScreen> {
   Future<RidesModel>? ridesPost;
   TextEditingController pickUp = TextEditingController();
   TextEditingController dropOff = TextEditingController();
-  var DBRef = FirebaseDatabase.instance.reference();
-  final FirebaseAuth auth = FirebaseAuth.instance;
-  DateTime currentPhoneDate = DateTime.now();
+  var name = '';
   var uid = FirebaseAuth.instance.currentUser?.uid;
+  List<PlacePredictions> placePredictionList = [];
+  getGoogleAddresslat(address) async {
+    const _host = 'https://maps.google.com/maps/api/geocode/json';
+    const apiKey = "AIzaSyBzaRTK2dTkKxQuK0a_OUn-lo611r_C-6o";
+    var encoded = Uri.encodeComponent(address);
+    final uri = Uri.parse('$_host?key=$apiKey&address=$encoded');
+
+    http.Response response = await http.get(uri);
+    final responseJson = json.decode(response.body);
+    var lat = responseJson['results'][0]['geometry']['location']['lat'];
+    var lng = responseJson['results'][0]['geometry']['location']['lng'];
+    //print(responseJson['results'][0]['geometry']['location']['lat']);
+
+    return lat.toString() + "," + lng.toString();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -86,6 +100,9 @@ class _SearchScreenState extends State<SearchScreen> {
                       ),
                       TextFormField(
                         // autovalidateMode: AutovalidateMode.onUserInteraction,
+                        onChanged: (val) {
+                          findPlace(val);
+                        },
                         controller: pickUp,
                         decoration: InputDecoration(
                           prefixIcon: Icon(
@@ -112,6 +129,9 @@ class _SearchScreenState extends State<SearchScreen> {
                       ),
                       TextFormField(
                         // autovalidateMode: AutovalidateMode.onUserInteraction,
+                        onChanged: (val) {
+                          findPlace(val);
+                        },
                         controller: dropOff,
                         decoration: InputDecoration(
                           prefixIcon: Icon(
@@ -140,9 +160,26 @@ class _SearchScreenState extends State<SearchScreen> {
                         minWidth: 120,
                         height: 60,
                         onPressed: () async {
+                          var drop = await getGoogleAddresslat(dropOff.text);
+                          var endLat = drop.toString().split(",")[0];
+                          print("the end lat is is ${endLat}");
+                          var endLng = drop.toString().split(",")[1];
+                          print("the endLng is is ${endLng}");
+                          var picku = await getGoogleAddresslat(pickUp.text);
+                          print("the pickup location is ${picku}");
+                          var startLat = picku.toString().split(",")[0];
+                          print("the startLat location is ${startLat}");
+                          var startLng = picku.toString().split(",")[1];
+                          print("the startLng location is ${startLng}");
                           setState(() {
-                            ridesPost =
-                                createRides("Sam", pickUp.text, dropOff.text);
+                            ridesPost = createRides(
+                                name,
+                                pickUp.text,
+                                dropOff.text,
+                                double.parse(startLat),
+                                double.parse(startLng),
+                                double.parse(endLat),
+                                double.parse(endLng));
                           });
                         },
                         color: Color(0xff90bc5a),
@@ -161,49 +198,56 @@ class _SearchScreenState extends State<SearchScreen> {
                       ),
                     ],
                   ))),
-          SizedBox(
-            height: 20.0,
-          ),
+          (placePredictionList.length > 0)
+              ? Padding(
+                  padding:
+                      EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+                  child: ListView.separated(
+                    padding: EdgeInsets.all(0.0),
+                    itemBuilder: (context, index) {
+                      return PredictionTile(
+                        placePredictions: placePredictionList[index],
+                      );
+                    },
+                    separatorBuilder: (BuildContext context, int index) =>
+                        Divider(
+                      thickness: 1.5,
+                      color: Color(0xff90bc5a),
+                    ),
+                    itemCount: placePredictionList.length,
+                    shrinkWrap: true,
+                    physics: ClampingScrollPhysics(),
+                  ),
+                )
+              : Container(),
         ],
       ),
     );
   }
 
-  //void findPlace(String placeName) {
-  // String mapKey = "AIzaSyC6nZUnGGN8HZlZX-jNgivAEsTs6JQJ_xw";
-
-  //if (placeName.length > 1) {
-  // String autofill =
-  //   "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$placeName&language=en&key=$mapKey";
-  // }
-  //}
-  var p = "hegenischstr. 10, 69124, Heidelberg";
-  var g = "hardtstraße, 96, 69124, Heidelberg";
-
-  var now = DateTime.now().toString();
-
-  void addplace() {
-    Map ridesDataMap = {
-      "name": "Mattias",
-      "pickUp": pickUp.text,
-      "dropOff": dropOff.text,
-      "time": now,
-    };
-    var ridesId = "87476EF";
-    //var user;
-    DBRef.child("Rides").child(ridesId).set(ridesDataMap);
-  }
-
-  Future<RidesModel> createRides(String name, String start, String end) async {
+  Future<RidesModel> createRides(
+    name,
+    start,
+    end,
+    startLat,
+    startLng,
+    endLat,
+    endLng,
+  ) async {
     final response = await http.post(
       Uri.parse('https://poc-api-vcoxoy66iq-uw.a.run.app/rides'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
+        "Access-Control_Allow_Origin": "*"
       },
-      body: jsonEncode(<String, String>{
-        "name": "Mattias",
+      body: jsonEncode(<dynamic, dynamic>{
+        "name": "",
         "start": pickUp.text,
         "end": dropOff.text,
+        "start_lat": startLat,
+        "start_lng": startLng,
+        "end_lat": endLat,
+        "end_lng": endLng,
       }),
     );
 
@@ -213,7 +257,28 @@ class _SearchScreenState extends State<SearchScreen> {
     } else {
       // If the server did not return a 201 CREATED response,
       // then throw an exception.
-      throw Exception('Failed to create a ride.');
+      throw Exception('Failed to create.');
+    }
+  }
+
+  void findPlace(String placeName) async {
+    String mapKey = "AIzaSyBzaRTK2dTkKxQuK0a_OUn-lo611r_C-6o";
+    if (placeName.length > 1) {
+      String url =
+          "https://maps.googleapis.com/maps/api/place/autocomplete/json?input=$placeName&key=$mapKey&sessiontoken=1234567890&components=country:de";
+
+      var res = await Requests.getRequest(url);
+      if (res == "failed") {
+        return;
+      } else if (res["status"] == "OK") {
+        var predictions = res["predictions"];
+        var placesList = (predictions as List)
+            .map((e) => PlacePredictions.fromJson(e))
+            .toList();
+        setState(() {
+          placePredictionList = placesList;
+        });
+      }
     }
   }
 }

@@ -13,10 +13,10 @@ class Requests {
         var decodeData = jsonDecode(jsonData);
         return decodeData;
       } else {
-        return "No response";
+        return "failed";
       }
     } catch (exp) {
-      return "No response";
+      return "failed";
     }
   }
 }
