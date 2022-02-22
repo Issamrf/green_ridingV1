@@ -5,9 +5,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:green_riding/models/placePredictions.dart';
 import 'package:green_riding/searchDrive/predictionTile.dart';
 import 'package:green_riding/searchDrive/ridesModel.dart';
+import 'package:green_riding/searchDrive/showPath.dart';
 import 'package:green_riding/services/requests.dart';
 
 import 'package:http/http.dart' as http;
+
+import 'chooseRide.dart';
 
 class SearchScreen extends StatefulWidget {
   @override
@@ -66,11 +69,56 @@ class _SearchScreenState extends State<SearchScreen> {
             color: Colors.black,
           ),
         ),
+        actions: [
+          Padding(
+            padding: EdgeInsets.all(10.0),
+            child: MaterialButton(
+              onPressed: () async {
+                var drop = await getGoogleAddresslat(dropOff.text);
+                var endLat = drop.toString().split(",")[0];
+                print("the end lat is is ${endLat}");
+                var endLng = drop.toString().split(",")[1];
+                print("the endLng is is ${endLng}");
+                var picku = await getGoogleAddresslat(pickUp.text);
+                print("the pickup location is ${picku}");
+                var startLat = picku.toString().split(",")[0];
+                print("the startLat location is ${startLat}");
+                var startLng = picku.toString().split(",")[1];
+                print("the startLng location is ${startLng}");
+                setState(() {
+                  ridesPost = createRides(
+                      name,
+                      pickUp.text,
+                      dropOff.text,
+                      double.parse(startLat),
+                      double.parse(startLng),
+                      double.parse(endLat),
+                      double.parse(endLng));
+                });
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => ChooseRide()));
+              },
+              color: Color(0xff90bc5a),
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Text(
+                "Submit",
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 12,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+        ],
       ),
       body: Column(
         children: [
           Container(
-              height: 270.0,
+              height: 200.0,
               decoration: BoxDecoration(color: Colors.white, boxShadow: [
                 BoxShadow(
                     color: Color(0xff90bc5a),
@@ -101,7 +149,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       TextFormField(
                         // autovalidateMode: AutovalidateMode.onUserInteraction,
                         onChanged: (val) {
-                          findPlace(val);
+                          //findPlace(val);
                         },
                         controller: pickUp,
                         decoration: InputDecoration(
@@ -130,7 +178,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       TextFormField(
                         // autovalidateMode: AutovalidateMode.onUserInteraction,
                         onChanged: (val) {
-                          findPlace(val);
+                          //findPlace(val);
                         },
                         controller: dropOff,
                         decoration: InputDecoration(
@@ -150,49 +198,6 @@ class _SearchScreenState extends State<SearchScreen> {
                             borderSide: BorderSide(
                               color: Color(0xff90bc5a),
                             ),
-                          ),
-                        ),
-                      ),
-                      SizedBox(
-                        height: 12.0,
-                      ),
-                      MaterialButton(
-                        minWidth: 120,
-                        height: 60,
-                        onPressed: () async {
-                          var drop = await getGoogleAddresslat(dropOff.text);
-                          var endLat = drop.toString().split(",")[0];
-                          print("the end lat is is ${endLat}");
-                          var endLng = drop.toString().split(",")[1];
-                          print("the endLng is is ${endLng}");
-                          var picku = await getGoogleAddresslat(pickUp.text);
-                          print("the pickup location is ${picku}");
-                          var startLat = picku.toString().split(",")[0];
-                          print("the startLat location is ${startLat}");
-                          var startLng = picku.toString().split(",")[1];
-                          print("the startLng location is ${startLng}");
-                          setState(() {
-                            ridesPost = createRides(
-                                name,
-                                pickUp.text,
-                                dropOff.text,
-                                double.parse(startLat),
-                                double.parse(startLng),
-                                double.parse(endLat),
-                                double.parse(endLng));
-                          });
-                        },
-                        color: Color(0xff90bc5a),
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(50),
-                        ),
-                        child: Text(
-                          "Suchen",
-                          style: TextStyle(
-                            fontWeight: FontWeight.w600,
-                            fontSize: 18,
-                            color: Colors.white,
                           ),
                         ),
                       ),
