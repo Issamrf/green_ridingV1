@@ -1,13 +1,17 @@
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:green_riding/screens/login/login.dart';
+import 'package:green_riding/screens/profile/profile.dart';
 import 'package:green_riding/screens/splashScreen/splashScreen.dart';
 import 'package:green_riding/searchDrive/chooseRide.dart';
+
 import 'package:green_riding/searchDrive/searchDrive.dart';
 import 'package:green_riding/searchDrive/searchScreen.dart';
 import 'package:green_riding/searchDrive/showPath.dart';
 import 'package:provider/provider.dart';
 
+import 'createDrive/createDrive.dart';
 import 'dataHandler/appData.dart';
 
 void main() async {
@@ -27,7 +31,7 @@ class MyApp extends StatelessWidget {
       create: (context) => AppData(),
       child: MaterialApp(
         debugShowCheckedModeBanner: false,
-        home: SearchDrive(),
+        home: Login(),
       ),
     );
   }

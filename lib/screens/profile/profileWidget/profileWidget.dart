@@ -38,7 +38,7 @@ class ProfileWidget extends StatelessWidget {
           children: [
             Center(
               child: Text(
-                "Sina Muster",
+                "Issam Rafiq",
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 24,

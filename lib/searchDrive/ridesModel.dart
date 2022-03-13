@@ -14,11 +14,13 @@ class RidesModel {
     required this.start_lng,
     required this.end_lat,
     required this.end_lng,
+    required this.time,
   });
 
   String name = "";
   String start = "";
   String end = "";
+  String time = "";
   double start_lat;
   double start_lng;
   double end_lat;
@@ -28,6 +30,7 @@ class RidesModel {
         name: json["name"],
         start: json["start"],
         end: json["end"],
+        time: json["time"],
         start_lat: json["start_lat"],
         start_lng: json["start_lng"],
         end_lat: json["end_lat"],
@@ -42,5 +45,6 @@ class RidesModel {
         "start_lng": start_lng,
         "end_lat": end_lat,
         "end_lng": end_lng,
+        "time": time,
       };
 }

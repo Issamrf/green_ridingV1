@@ -4,8 +4,10 @@ import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:green_riding/dataHandler/appData.dart';
+import 'package:green_riding/searchDrive/searchDrive.dart';
 import 'package:green_riding/searchDrive/searchScreen.dart';
 import 'package:green_riding/searchDrive/showPath.dart';
+
 import 'package:green_riding/services/assistantMethods.dart';
 import 'package:green_riding/widgets/devider.dart';
 import 'package:provider/provider.dart';
@@ -57,7 +59,8 @@ class _ChooseRideState extends State<ChooseRide> {
           automaticallyImplyLeading: false,
           leading: IconButton(
             onPressed: () {
-              Navigator.pop(context);
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => SearchDrive()));
             },
             icon: Icon(
               Icons.arrow_back_ios,

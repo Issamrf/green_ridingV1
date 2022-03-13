@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:green_riding/searchDrive/chooseRide.dart';
 import 'package:sliding_up_panel/sliding_up_panel.dart';
 import '../widgets/devider.dart';
 import 'DirectionsModel.dart';
@@ -136,6 +137,30 @@ class ShowPathState extends State<ShowPath> {
         tilt: CAMERA_TILT,
         target: LatLng(49.374137, 8.673885));
     return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          "",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 35,
+            color: Colors.grey,
+          ),
+        ),
+        elevation: 0,
+        brightness: Brightness.light,
+        backgroundColor: Colors.white,
+        leading: IconButton(
+          onPressed: () {
+            Navigator.push(
+                context, MaterialPageRoute(builder: (context) => ChooseRide()));
+          },
+          icon: Icon(
+            Icons.arrow_back_ios,
+            size: 20,
+            color: Colors.black,
+          ),
+        ),
+      ),
       body: isloading
           ? Center(
               child: CircularProgressIndicator(),
@@ -167,53 +192,55 @@ class ShowPathState extends State<ShowPath> {
                     itemCount: directions['segments'].length,
                     itemBuilder: (context, i) => Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "${directions['segments'][i]['start_time'].toString().split("T")[1].toString().split(".")[0]} " +
-                                " ${directions['segments'][i]['start']}",
-                            style: TextStyle(
-                              //color: Colors.green,
-                              fontSize: 15,
-                            ),
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Row(
-                            children: [
-                              Icon(
-                                directions['segments'][i]['vehicletype'] ==
-                                        "bus"
-                                    ? Icons.directions_bus_filled_outlined
-                                    : Icons.directions_car_filled_outlined,
-                                color: Color(0xff90bc5a),
-                              ),
-                              Text(
-                                "${directions['segments'][i]['vehicleid'].toString()}",
-                                style: TextStyle(
-                                  //color: Colors.green,
-                                  fontSize: 15,
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 5,
-                          ),
-                          Text(
-                              "${directions['segments'][i]['end_time'].toString().split("T")[1].toString().split(".")[0]} " +
-                                  " ${directions['segments'][i]['end']}",
+                      child: SingleChildScrollView(
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "${directions['segments'][i]['start_time'].toString().split("T")[1].toString().split(".")[0]} " +
+                                  " ${directions['segments'][i]['start']}",
                               style: TextStyle(
                                 //color: Colors.green,
                                 fontSize: 15,
-                              )),
-                          SizedBox(
-                            height: 7,
-                          ),
-                          DividerWidget(),
-                        ],
+                              ),
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Row(
+                              children: [
+                                Icon(
+                                  directions['segments'][i]['vehicletype'] ==
+                                          "bus"
+                                      ? Icons.directions_bus_filled_outlined
+                                      : Icons.directions_car_filled_outlined,
+                                  color: Color(0xff90bc5a),
+                                ),
+                                Text(
+                                  "${directions['segments'][i]['vehicleid'].toString()}",
+                                  style: TextStyle(
+                                    //color: Colors.green,
+                                    fontSize: 15,
+                                  ),
+                                ),
+                              ],
+                            ),
+                            SizedBox(
+                              height: 5,
+                            ),
+                            Text(
+                                "${directions['segments'][i]['end_time'].toString().split("T")[1].toString().split(".")[0]} " +
+                                    " ${directions['segments'][i]['end']}",
+                                style: TextStyle(
+                                  //color: Colors.green,
+                                  fontSize: 15,
+                                )),
+                            SizedBox(
+                              height: 7,
+                            ),
+                            DividerWidget(),
+                          ],
+                        ),
                       ),
                     ),
                   )

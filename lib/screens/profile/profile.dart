@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:green_riding/screens/profile/profileWidget/profileWidget.dart';
@@ -8,9 +10,42 @@ class Profile extends StatefulWidget {
 }
 
 class _ProfileState extends State<Profile> {
+  FirebaseAuth auth = FirebaseAuth.instance;
+
   late final bool ifSmoke = false;
   late final bool ifAnimal = false;
   late final bool ifvaccinated = true;
+  bool isloading = false;
+  var userdata = [];
+
+  late final dref =
+      FirebaseDatabase.instance.reference().child("users/" + currentUser());
+
+  void initState() {
+    super.initState();
+
+    showdata();
+  }
+
+  currentUser() {
+    final User? user = auth.currentUser;
+    final uid = user!.uid.toString();
+    return uid;
+  }
+
+  showdata() {
+    setState(() {
+      isloading = true;
+    });
+    dref.once().then((snapshot) {
+      snapshot.value["email"] = userdata;
+      print(snapshot.value["email"]);
+    });
+    setState(() {
+      isloading = false;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,7 +65,9 @@ class _ProfileState extends State<Profile> {
         backgroundColor: Colors.white,
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              showdata();
+            },
             icon: Icon(
               Icons.notification_important,
               size: 30,
@@ -45,7 +82,9 @@ class _ProfileState extends State<Profile> {
           physics: BouncingScrollPhysics(),
           children: [
             ProfileWidget(
-              onPressed: () {},
+              onPressed: () {
+                showdata();
+              },
               imageDirection: '',
             ),
             const SizedBox(height: 40),
@@ -65,7 +104,9 @@ class _ProfileState extends State<Profile> {
                   children: [
                     Center(
                         child: Text(
-                      """Ich studiere BWL in Frankfurt und pendel jeden Tag dort hin. Ich freue mich auf eure Anfragen“""",
+                      """${dref.once().then((snapshot) {
+                        snapshot.value["email"];
+                      })}""",
                       style: TextStyle(
                         fontSize: 16,
                         height: 1.4,

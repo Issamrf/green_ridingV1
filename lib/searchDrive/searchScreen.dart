@@ -21,6 +21,7 @@ class _SearchScreenState extends State<SearchScreen> {
   Future<RidesModel>? ridesPost;
   TextEditingController pickUp = TextEditingController();
   TextEditingController dropOff = TextEditingController();
+  TextEditingController timeField = TextEditingController();
   var name = '';
   var uid = FirebaseAuth.instance.currentUser?.uid;
   List<PlacePredictions> placePredictionList = [];
@@ -45,11 +46,13 @@ class _SearchScreenState extends State<SearchScreen> {
     // pickUp.text = placeAdress;
 
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         bottomOpacity: 0.0,
         elevation: 0,
         automaticallyImplyLeading: false,
+
         //leading: Icon(Icons.arrow_back_ios, color: Colors.black),
 
         title: Text(
@@ -90,6 +93,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       name,
                       pickUp.text,
                       dropOff.text,
+                      timeField.text,
                       double.parse(startLat),
                       double.parse(startLng),
                       double.parse(endLat),
@@ -118,7 +122,7 @@ class _SearchScreenState extends State<SearchScreen> {
       body: Column(
         children: [
           Container(
-              height: 200.0,
+              height: 250.0,
               decoration: BoxDecoration(color: Colors.white, boxShadow: [
                 BoxShadow(
                     color: Color(0xff90bc5a),
@@ -149,7 +153,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       TextFormField(
                         // autovalidateMode: AutovalidateMode.onUserInteraction,
                         onChanged: (val) {
-                          //findPlace(val);
+                          findPlace(val);
                         },
                         controller: pickUp,
                         decoration: InputDecoration(
@@ -178,7 +182,7 @@ class _SearchScreenState extends State<SearchScreen> {
                       TextFormField(
                         // autovalidateMode: AutovalidateMode.onUserInteraction,
                         onChanged: (val) {
-                          //findPlace(val);
+                          findPlace(val);
                         },
                         controller: dropOff,
                         decoration: InputDecoration(
@@ -197,6 +201,36 @@ class _SearchScreenState extends State<SearchScreen> {
                             borderRadius: BorderRadius.circular(30),
                             borderSide: BorderSide(
                               color: Color(0xff90bc5a),
+                            ),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        height: 12.0,
+                      ),
+                      SizedBox(
+                        width: 200,
+                        child: TextFormField(
+                          focusNode: myFocusNode3,
+                          controller: timeField,
+                          // autovalidateMode: AutovalidateMode.onUserInteraction,
+                          decoration: InputDecoration(
+                            prefixIcon: Icon(
+                              Icons.timer,
+                              color: Color(0xff90bc5a),
+                            ),
+                            hintText: "Zeit",
+                            contentPadding: EdgeInsets.symmetric(
+                                vertical: 0, horizontal: 10),
+                            focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(30),
+                              borderSide: BorderSide(color: Color(0xff90bc5a)),
+                            ),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(30),
+                              borderSide: BorderSide(
+                                color: Color(0xff90bc5a),
+                              ),
                             ),
                           ),
                         ),
@@ -234,6 +268,7 @@ class _SearchScreenState extends State<SearchScreen> {
     name,
     start,
     end,
+    time,
     startLat,
     startLng,
     endLat,
@@ -249,6 +284,7 @@ class _SearchScreenState extends State<SearchScreen> {
         "name": "",
         "start": pickUp.text,
         "end": dropOff.text,
+        "time": timeField.text,
         "start_lat": startLat,
         "start_lng": startLng,
         "end_lat": endLat,
